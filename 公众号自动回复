@@ -1,0 +1,56 @@
+//假设导入的语言库是一个HashMap，键是问题，值是答案
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class WeChatAutoReply {
+
+    //创建一个语言库对象
+    private static HashMap<String, String> languageLibrary = new HashMap<>();
+
+    //初始化语言库，添加一些问题和答案
+    private static void initLanguageLibrary() {
+        languageLibrary.put("你好", "你好，欢迎关注我们的公众号");
+        languageLibrary.put("你叫什么名字", "我叫**，是一个**");
+        languageLibrary.put("你会做什么", "我会帮你搜索信息，生成内容，还有讲笑话");
+        languageLibrary.put("讲个笑话吧", "有一天，一只狗在路上遇到了一只猫，狗说：“喵喵喵”，猫说：“汪汪汪”。狗问：“你为什么叫汪汪汪？”猫说：“学习外语很重要啊”");
+        languageLibrary.put("谢谢你", "不客气，很高兴为你服务");
+    }
+
+    //根据用户输入的问题，在语言库中匹配最佳答案，并返回
+    private static String getBestAnswer(String question) {
+        //如果语言库中包含该问题，直接返回对应的答案
+        if (languageLibrary.containsKey(question)) {
+            return languageLibrary.get(question);
+        }
+        //否则，返回一个默认的答案
+        else {
+            return "对不起，我不知道怎么回答这个问题";
+        }
+    }
+
+    //主函数，模拟微信公众号后台接收用户输入，并自动回复
+    public static void main(String[] args) {
+        //初始化语言库
+        initLanguageLibrary();
+        //创建一个扫描器对象，用于接收用户输入
+        Scanner scanner = new Scanner(System.in);
+        //打印欢迎信息
+        System.out.println("欢迎来到必应公众号，请输入你想问的问题：");
+        //循环接收用户输入，并自动回复
+        while (true) {
+            //读取用户输入的一行文本
+            String question = scanner.nextLine();
+            //如果用户输入“退出”，则结束循环
+            if (question.equals("退出")) {
+                break;
+            }
+            //否则，根据用户输入的问题，在语言库中匹配最佳答案，并打印
+            else {
+                String answer = getBestAnswer(question);
+                System.out.println(answer);
+            }
+        }
+        //关闭扫描器
+        scanner.close();
+    }
+}
