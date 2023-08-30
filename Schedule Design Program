@@ -1,0 +1,65 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ScheduleApp {
+    private JFrame frame;
+    private JTextArea scheduleTextArea;
+    private List<String> scheduleList;
+
+    public ScheduleApp() {
+        scheduleList = new ArrayList<>();
+
+        frame = new JFrame("日程表应用");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 300);
+
+        scheduleTextArea = new JTextArea(10, 30);
+        scheduleTextArea.setEditable(false);
+
+        JButton addButton = new JButton("添加日程");
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String schedule = JOptionPane.showInputDialog(frame, "请输入新的日程:");
+                if (schedule != null && !schedule.isEmpty()) {
+                    scheduleList.add(schedule);
+                    updateScheduleText();
+                }
+            }
+        });
+
+        JPanel panel = new JPanel();
+        panel.add(addButton);
+
+        frame.add(scheduleTextArea, BorderLayout.CENTER);
+        frame.add(panel, BorderLayout.SOUTH);
+
+        updateScheduleText();
+    }
+
+    private void updateScheduleText() {
+        StringBuilder text = new StringBuilder();
+        for (String schedule : scheduleList) {
+            text.append(schedule).append("\n");
+        }
+        scheduleTextArea.setText(text.toString());
+    }
+
+    public void show() {
+        frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                ScheduleApp app = new ScheduleApp();
+                app.show();
+            }
+        });
+    }
+}
