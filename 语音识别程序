@@ -1,0 +1,33 @@
+import com.baidu.aip.speech.AipSpeech;
+import org.json.JSONObject;
+
+public class AudioToTextConverter {
+    // 请替换为你自己的API Key、Secret Key和App ID
+    private static final String APP_ID = "Your_App_ID";
+    private static final String API_KEY = "Your_API_Key";
+    private static final String SECRET_KEY = "Your_Secret_Key";
+
+    public static void main(String[] args) {
+        // 初始化一个AipSpeech对象
+        AipSpeech client = new AipSpeech(APP_ID, API_KEY, SECRET_KEY);
+
+        // 设置参数
+        JSONObject options = new JSONObject();
+        options.put("dev_pid", 1536); // 1536表示普通话(支持简单的中文识别)
+
+        // 语音文件路径
+        String audioFilePath = "path_to_your_audio_file.wav";
+
+        // 调用API进行语音识别
+        JSONObject result = client.asr(audioFilePath, "wav", 16000, options);
+
+        // 解析识别结果
+        if (result != null && result.has("result")) {
+            String[] textArray = result.getJSONArray("result").toString().split("\"");
+            String recognizedText = textArray[textArray.length - 2];
+            System.out.println("识别结果： " + recognizedText);
+        } else {
+            System.out.println("识别失败");
+        }
+    }
+}
