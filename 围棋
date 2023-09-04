@@ -1,0 +1,76 @@
+import random
+
+# 定义围棋棋盘大小
+BOARD_SIZE = 9
+
+# 初始化棋盘
+def initialize_board():
+    board = [[' ' for _ in range(BOARD_SIZE)] for _ in range(BOARD_SIZE)]
+    return board
+
+# 打印棋盘
+def print_board(board):
+    print("  1 2 3 4 5 6 7 8 9")
+    for i in range(BOARD_SIZE):
+        row = [board[i][j] for j in range(BOARD_SIZE)]
+        print(f"{i + 1} {' '.join(row)}")
+
+# 玩家下子
+def player_move(board):
+    while True:
+        try:
+            row = int(input("请输入下子的行数 (1-9): ")) - 1
+            col = int(input("请输入下子的列数 (1-9): ")) - 1
+
+            if 0 <= row < BOARD_SIZE and 0 <= col < BOARD_SIZE and board[row][col] == ' ':
+                board[row][col] = 'X'
+                break
+            else:
+                print("无效的位置，请重新输入。")
+        except ValueError:
+            print("请输入有效的数字。")
+
+# AI下子（随机下子）
+def ai_move(board):
+    empty_cells = [(i, j) for i in range(BOARD_SIZE) for j in range(BOARD_SIZE) if board[i][j] == ' ']
+    if empty_cells:
+        row, col = random.choice(empty_cells)
+        board[row][col] = 'O'
+
+# 游戏主循环
+def main_game():
+    board = initialize_board()
+    print("欢迎来到围棋游戏！")
+    print_board(board)
+    
+    for _ in range(BOARD_SIZE * BOARD_SIZE):
+        player_move(board)
+        print_board(board)
+        if check_winner(board, 'X'):
+            print("恭喜，你赢了！")
+            break
+
+        ai_move(board)
+        print("AI下子：")
+        print_board(board)
+        if check_winner(board, 'O'):
+            print("AI赢了！")
+            break
+    
+    print("游戏结束。")
+
+# 检查胜利条件
+def check_winner(board, player):
+    # 在这个简单版本中，我们只检查横向和纵向是否连成5子，更复杂的规则可以在此扩展
+    for i in range(BOARD_SIZE):
+        for j in range(BOARD_SIZE):
+            if (
+                j + 4 < BOARD_SIZE and all(board[i][j + k] == player for k in range(5)) or
+                i + 4 < BOARD_SIZE and all(board[i + k][j] == player for k in range(5))
+            ):
+                return True
+    return False
+
+# 启动游戏
+if __name__ == "__main__":
+    main_game()
