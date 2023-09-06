@@ -1,0 +1,24 @@
+import java.util.*;
+
+public class WordClassifier {
+    public static void main(String[] args) {
+        String[] words = {"apple", "banana", "avocado", "blueberry", "apricot", "cherry", "grape"};
+
+        Map<Character, List<String>> wordMap = new HashMap<>();
+
+        for (String word : words) {
+            char firstLetter = word.charAt(0);
+            if (!wordMap.containsKey(firstLetter)) {
+                wordMap.put(firstLetter, new ArrayList<>());
+            }
+            wordMap.get(firstLetter).add(word);
+        }
+
+        for (Map.Entry<Character, List<String>> entry : wordMap.entrySet()) {
+            char firstLetter = entry.getKey();
+            List<String> wordList = entry.getValue();
+
+            System.out.println("Words starting with '" + firstLetter + "': " + wordList);
+        }
+    }
+}
